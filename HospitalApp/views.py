@@ -1,10 +1,25 @@
 from django.contrib.auth.models import User, Group
 from django.shortcuts import render
+from django.http import HttpResponse
+from django.contrib.auth import login,authenticate
 from .models import *
 # Create your views here.
 def IndexPage(request):
     return render(request,'index.html')
 def LoginPage(request):
+    if request.method == 'POST':
+        username = request.POST['email']
+        password = request.POST['password']
+        user = authenticate(request,username=username,password=password)
+        try:
+            if user is not None:
+                login(request,user)
+                u=request.user.groups.all()[0].name
+                if u == 'Patient':
+                    return HttpResponse('Patient LoggedIn ....')
+
+        except Exception as e:
+            print(e)
     return render(request,'login.html')
 def AboutPage(request):
     return render(request,'about.html')
