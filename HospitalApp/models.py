@@ -25,3 +25,16 @@ class Docto(models.Model):
     Specialization      =   models.CharField(max_length=50)
     def __str__(self):
         return self.Doct_Name
+
+class Appoinment(models.Model):
+    Doctname        =   models.CharField(max_length=50)
+    PatientName     =   models.CharField(max_length=50)
+    DoctMail        =   models.EmailField(max_length=50)
+    PatientMail     =   models.EmailField(max_length=50)
+    AppoinmentDate  =   models.DateField()
+    AppoinmentTime  =   models.TimeField()
+    Symptoms        =   models.TextField()
+    Prescription    =   models.CharField(max_length=40)
+    Status          =   models.BooleanField(default=False)
+    def __str__(self):
+        return self.PatientName +'You have appoinment with'
