@@ -1,16 +1,18 @@
 {% extends 'base.html' %}
 {% block title %}Login Page{% endblock %}
 {% block content %}
-
-<body>
-    <div class="login-dark" style="background-image: url(&quot;assets/img/star-sky.jpg&quot;);">
-        <form method="POST">
-            {% csrf_token %}
-            <h2 class="sr-only">Login Form</h2>
-            <div class="illustration"><i class="icon ion-ios-locked-outline"></i></div>
-            <div class="form-group"><input class="form-control" type="email" name="email" placeholder="Email"></div>
-            <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password"></div>
-            <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Log In</button></div><a class="forgot" href="#">New user? Create Account</a></form>
-    </div>
-
+<div class="login-dark" style="background-image: url(&quot;assets/img/star-sky.jpg&quot;);">
+    <form method="POST">
+        {% csrf_token %}
+        <h2 class="sr-only">Login Form</h2>
+        <div class="illustration"><i class="icon ion-ios-locked-outline"></i></div>
+        <div class="form-group"><input class="form-control" type="email" name="email" placeholder="Email"></div>
+        <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password"></div>
+        <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Log In</button></div>
+        <a class="forgot" href="{% url 'createaccount' %}">New user? Create Account</a>
+        {% if error %}
+        <p>{{ error }}</p>
+        {% endif %}
+    </form>
+</div>
 {% endblock %}

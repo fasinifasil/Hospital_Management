@@ -21,10 +21,13 @@ from django.urls import path
 from HospitalApp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.IndexPage,name='index'),
+    path('index',views.IndexPage,name='index'),
     path('about',views.AboutPage,name='about'),
     path('login',views.LoginPage,name='login'),
+    path('homepage',views.Home,name='homepage'),
+    path('profile',views.Profile,name='profile'),
     path('createaccount',views.CreateAccountPage,name='createaccount'),
+    path('logOut',views.LogoutFunction,name='logOut'),
 ]
 if settings.DEBUG:
     urlpatterns+=static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

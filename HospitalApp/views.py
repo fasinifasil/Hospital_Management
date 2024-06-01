@@ -1,26 +1,23 @@
 from django.contrib.auth.models import User, Group
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from django.contrib.auth import login,authenticate
+from django.contrib.auth import login,authenticate,logout
 from .models import *
 # Create your views here.
 def IndexPage(request):
     return render(request,'index.html')
 def LoginPage(request):
+    error = ""
     if request.method == 'POST':
-        username = request.POST['email']
-        password = request.POST['password']
-        user = authenticate(request,username=username,password=password)
-        try:
-            if user is not None:
-                login(request,user)
-                u=request.user.groups.all()[0].name
-                if u == 'Patient':
-                    return HttpResponse('Patient LoggedIn ....')
-
-        except Exception as e:
-            print(e)
-    return render(request,'login.html')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user = authenticate(request, username=email, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('homepage')
+        else:
+            error = "Invalid email or password."
+    return render(request, 'login.html', {'error': error})
 def AboutPage(request):
     return render(request,'about.html')
 
@@ -49,3 +46,23 @@ def CreateAccountPage(request):
         except Exception as e:
             error = 'yes'
     return render(request, 'createaccount.html', {'error': error})
+def LogoutFunction(request):
+    logout(request)
+    return redirect('login')
+
+def Home(request):
+    if not request.user.is_active:
+        return redirect('login')
+    user1 = request.user.groups.all()[0].name
+    if user1=='Patient':
+        return render(request,'patienthome.html')
+def Profile(request):
+    if not request.user.is_active:
+        return redirect('login')
+    user1 = request.user.groups.all()[0].name
+    if user1 == 'Patient':
+        patient_details = PatientModel.objects.all().filter(Email=request.user)
+        context ={'patientDetails':patient_details}
+
+        return render(request, 'pateintprofile.html',context)
+
